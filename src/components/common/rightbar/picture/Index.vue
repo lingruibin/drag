@@ -43,7 +43,7 @@
       }
     },
     created() {
-      this.loadTypeList();
+      // this.loadTypeList();
     },
     computed: {},
     methods: {

@@ -34,6 +34,7 @@
 <script>
   import ViewPortActive from '../../viewport/index'
   import ViewPort from '../../viewport/IndexLeft'
+  import dataList from '../../../assets/data'
 
   export default {
     name: 'Main',
@@ -62,21 +63,13 @@
     methods: {
       getPageList() {
         let that = this;
-        this.$http.get("/page/design/list?page=1&pageSize=200&projectId=" + this.$store.state.project.projectId).then(res => {
-          if (!res.data.data.list || !res.data.data.list.length) {
 
-          } else {
+        let data = dataList;
+        that.$store.commit("refreshPageList", data.data.list);
+        that.$store.commit("refreshPageId", data.data.list[0]);
+        that.$store.commit("refreshPageDetail", JSON.parse(data.data.list[0].draft));
+        that.$store.commit("changeLoading", false);
 
-            that.$store.commit("refreshPageList", res.data.data.list);
-            that.$store.commit("refreshPageId", res.data.data.list[0]);
-            that.$store.commit("refreshPageDetail", JSON.parse(res.data.data.list[0].draft));
-            that.$store.commit("changeLoading", false);
-
-          }
-
-        }).catch(err => {
-          console.log("ERR： " + err)
-        })
       },
       /**
        * 创建页面(复制方式)
@@ -107,8 +100,7 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          _this.$http.post("/page/design/delete?id=" + item.id).then(res => {
-            if (res.data.state === 'ok') {
+
               var list = _this.$store.state.pageList;
               list.splice(index, 1);
 
@@ -118,12 +110,6 @@
               list[newIndex].sort = newIndex;
               _this.$store.commit("refreshPageId", list[newIndex]);
               _this.$store.commit("refreshPageDetail", JSON.parse(list[newIndex].draft));
-
-            } else {
-              _this.$message.error("删除失败")
-            }
-
-          });
 
 
         }).catch(() => {
@@ -136,19 +122,16 @@
       addPage(item, index) {
 
         let that = this;
-        that.$store.commit("changeLoading", true);
+        // that.$store.commit("changeLoading", true);
         item.shopId = that.$store.state.project.shopId;
-        item.id = "";
+        item.id = (parseInt(item.id))+1;
         item.projectId = that.$store.state.project.projectId;
-        item.sort = index+1;
+        item.sort = index + 1;
         item.name = "页面";
 
-        this.$http.get("/page/design/save", {params: item}).then(res => {
-          if (res.data.state === 'ok') {
             var list = that.$store.state.pageList;
-            list.splice(index + 1, 0, res.data.data);
-            // console.log(that.$store.state.pageList)
-            // console.log(2222222222)
+            list.splice(index + 1, 0, item);
+
 
             var newList = list.map((val, index) => {
               val.sort = index;
@@ -157,39 +140,30 @@
             that.$store.commit("refreshPageList", newList);
             // console.log(that.$store.state.pageList)
 
-            that.$store.commit("refreshPageId", res.data.data);
-            that.$store.commit("refreshPageDetail", JSON.parse(res.data.data.draft));
-          } else {
-            that.$message.error("复制失败")
-          }
-          that.$store.commit("changeLoading", false);
-
-        }).catch(error => {
-          console.log("Error： " + JSON.stringify(error))
+            that.$store.commit("refreshPageId", item);
+            that.$store.commit("refreshPageDetail", JSON.parse(item.draft));
 
           that.$store.commit("changeLoading", false);
-        })
-
 
       },
       //切换页面
 
       selectPage(item, index) {
         let that = this;
-        that.$store.commit("changeLoading", true);
-        this.$http.get("/page/design/save",
-          {
-            params: {
-              shopId: that.$store.state.project.shopId,
-              name: name,
-              id: that.$store.state.currentPageId,
-              projectId: this.$store.state.project.projectId,
-              sort: that.$store.state.currentPageSort,
-              draft: JSON.stringify(this.$store.state.pageDetail)
-            },
-          }
-        ).then(res => {
-          if (res.data.state === 'ok') {
+        // that.$store.commit("changeLoading", true);
+        // this.$http.get("/page/design/save",
+        //   {
+        //     params: {
+        //       shopId: that.$store.state.project.shopId,
+        //       name: name,
+        //       id: that.$store.state.currentPageId,
+        //       projectId: this.$store.state.project.projectId,
+        //       sort: that.$store.state.currentPageSort,
+        //       draft: JSON.stringify(this.$store.state.pageDetail)
+        //     },
+        //   }
+        // ).then(res => {
+        //   if (res.data.state === 'ok') {
             var list = that.$store.state.pageList;
             list.some(val => {
               if (val.id === that.$store.state.currentPageId) {
@@ -202,19 +176,18 @@
             that.$store.commit("refreshPageId", item);
             that.$store.commit("resetActiveElement");
             that.$store.commit("refreshPageDetail", JSON.parse(item.draft));
-            console.log(JSON.stringify(that.$store.state.pageList))
 
-
-          } else {
-            that.$message.error(res.body.msg)
-
-          }
-          that.$store.commit("changeLoading", false)
-
-
-        }).catch(error => {
-
-        })
+        //
+        //   } else {
+        //     that.$message.error(res.body.msg)
+        //
+        //   }
+        //   that.$store.commit("changeLoading", false)
+        //
+        //
+        // }).catch(error => {
+        //
+        // })
 
       },
 

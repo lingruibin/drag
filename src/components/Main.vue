@@ -5,7 +5,7 @@
       <div class="back fl" @click.stop="back()"><a>返回我的作品</a></div>
       <div class="publish fr" @click.stop="publishProject"><a>发布</a></div>
       <div class="preview fr" @click.stop="handlePreview"><a>标题和预览</a></div>
-      <div class="save fr" @click.stop="saveProject"><a>保存</a></div>
+      <div class="save fr"  ><a>保存</a></div>
     </div>
     <div>
       <left-bar></left-bar>
@@ -235,7 +235,7 @@
         })
       },
       publishProject() {
-        this.saveProject(0);
+        // this.saveProject(0);
 
         //发布
       },

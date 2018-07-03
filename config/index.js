@@ -12,7 +12,7 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
       "/page": {
-        target: "http://dev.page.9hive.cn",
+        target: "http://lrb.yunjuanyunshu.cn",
         changeOrigin: true,
 
       },
