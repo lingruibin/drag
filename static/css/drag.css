@@ -1,0 +1,29 @@
+.panel-wrap select, .panel-wrap input {
+  min-height: 32px;
+}
+
+input[type='color'] {
+  width: 100% !important;
+  min-width: 40px;
+}
+
+.tab .tab-item.active a, .tab .tab-item a.active {
+  border-bottom-color: #409EFF !important;
+  color: #409EFF !important;
+
+}
+.el-input-number.is-controls-right .el-input__inner{
+  padding-right: 40px!important;
+}
+.dialog-body{
+  height: 720px;
+  border-radius: 8px;
+}
+.el-dialog__body{
+  padding: 0!important;
+}
+.swiper-slide .screens{
+  display: none!important;
+}.swiper-slide-active .screens{
+  display: block!important;
+}
